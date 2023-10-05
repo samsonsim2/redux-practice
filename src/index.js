@@ -2,16 +2,46 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+ 
+
+// Redux tool kit  
+import {Provider} from 'react-redux'
+// import createSagaMiddleware  from 'redux-saga'
+import {configureStore} from '@reduxjs/toolkit'
+import createSagaMiddleware  from 'redux-saga'
+
+//Reducer
+import counterReducer from './counterState'
+import cocktailReducer from './cocktailState'
+import cocktailSaga from './cocktailSaga';
+ 
+
+
+// Configure saga and store  
+const saga = createSagaMiddleware();
+
+
+const store = configureStore({
+  reducer:{
+    counter: counterReducer,
+    cocktails : cocktailReducer,
+
+
+  },
+  middleware:[saga]
+
+})
+saga.run(cocktailSaga)
+
+
+//run saga
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+ <Provider store={store}>
     <App />
-  </React.StrictMode>
+  </Provider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+ 

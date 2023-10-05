@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+ 
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { increment,decrement } from './counterState';
+ 
+
 import './App.css';
+import { getCocktailsFetch } from './cocktailState';
+
+ 
 
 function App() {
+
+  const counterValue = useSelector((state)=> state.counter.counterValue)
+  const cocktails = useSelector ((state)=>state.cocktails.cocktails)
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getCocktailsFetch())
+    
+  },[dispatch])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {cocktails.map((cocktail)=>{
+        return <div>{cocktail.name}</div>
+      })}
+      <button onClick={()=>{dispatch(decrement())}}>minus</button>
+      {counterValue}
+      <button onClick={()=>{dispatch(increment())}}>add</button>
     </div>
   );
 }
